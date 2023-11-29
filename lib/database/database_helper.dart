@@ -32,6 +32,7 @@ class DatabaseHelper {
         ${Product.colName} TEXT PRIMARY KEY,
         ${Product.colDescription} TEXT NOT NULL,
         ${Product.colPrice} NUMERIC NOT NULL,
+        ${Product.coltime} ,
         ${Product.colFavorite} INTEGER NOT NULL
       )
    ''');
@@ -72,6 +73,7 @@ class DatabaseHelper {
           name: maps[index][Product.colName],
           description: maps[index][Product.colDescription],
           price: maps[index][Product.colPrice] + 0.00,
+          time: maps[index][Product.coltime],
           favorite: maps[index][Product.colFavorite],
         );
       });

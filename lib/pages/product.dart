@@ -34,7 +34,7 @@ class _ProductScreenState extends State<ProductScreen> {
               icon: const Icon(Icons.add_comment)),
           //IconButton(onPressed:var d=1; , icon:const Icon(Icons. ))
         ],
-        title: const Text('Products'),
+        title: const Text('Composition'),
       ),
       body: ListView.builder(
         itemCount: widget.products.length,
@@ -55,7 +55,8 @@ class _ProductScreenState extends State<ProductScreen> {
             child: ListTile(
               title: Text(widget.products[index].name),
               subtitle:
-              Text('Price: ${widget.products[index].price.toString()}'),
+              Text('Price: ${widget.products[index].price.toString()}'+' Date: ${widget.products[index].time.toString()}'+' Type: ${widget.products[index].description.toString()}'),
+
               trailing: widget.products[index].favorite == 1
                   ? const Icon(Icons.favorite_rounded, color: Colors.red)
                   : null,
@@ -173,7 +174,7 @@ class ModalProductForm {
   String _name = '', _description = '';
   double _price = 0;
   final int _favorite = 0;
-
+  DateTime _time=DateTime.now();
   Future<dynamic> showModalInputForm(BuildContext context) {
     return showModalBottomSheet(
         shape: RoundedRectangleBorder(
@@ -192,7 +193,7 @@ class ModalProductForm {
                 const ListTile(
                   title: Center(
                     child: Text(
-                      'Product input Form',
+                      'Composition input Form',
                       style:
                       TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
@@ -206,8 +207,8 @@ class ModalProductForm {
                         initialValue: '',
                         autofocus: true,
                         decoration: const InputDecoration(
-                          labelText: 'Product Name',
-                          hintText: 'input your name of product',
+                          labelText: 'Composition Name',
+                          hintText: 'input your name of composition',
                         ),
                         onChanged: (value) {
                           _name = value;
@@ -241,6 +242,19 @@ class ModalProductForm {
                       ),
                     ),
                     Container(
+                      margin: const EdgeInsets.all(15),
+                      child: TextFormField(
+                        initialValue: '',
+                        decoration: const InputDecoration(
+                          labelText: 'Time',
+                          hintText: 'input Time',
+                        ),
+                        onChanged: (value) {
+                          _time = DateTime.now();
+                        },
+                      ),
+                    ),
+                    Container(
                       margin: const EdgeInsets.all(20),
                       child: ElevatedButton(
                           child: const Text('Add'),
@@ -249,6 +263,7 @@ class ModalProductForm {
                                 name: _name,
                                 description: _description,
                                 price: _price,
+                                time: _time,
                                 favorite: _favorite);
                             products.add(newProduct);
                             await dbHelper.insertProduct(newProduct);
@@ -272,6 +287,7 @@ class ModalEditproductForm {
   String _name = '', _description = '';
   double _price = 0;
   int _favorite = 0;
+  DateTime _time=DateTime.now();
 
   Future<dynamic> showModalInputForm(BuildContext context) {
     _favorite=productDetail.favorite;
@@ -355,6 +371,7 @@ class ModalEditproductForm {
                                 name: _name,
                                 description: _description,
                                 price: _price,
+                                time: _time,
                                 favorite: _favorite);
 
                             await dbHelper.updateProduct(newProduct);
