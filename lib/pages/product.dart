@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:project2/database/database_helper.dart';
+import 'package:project2/pages/Warning.dart';
+import 'package:project2/pages/home.dart';
 import '../database/model.dart';
 
 // ignore: must_be_immutable
@@ -18,6 +20,36 @@ class _ProductScreenState extends State<ProductScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomNavigationBar: BottomAppBar(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+
+            IconButton(
+
+              icon: Icon(Icons.home),
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => home()),);
+              },
+            ),
+            IconButton(
+              icon: Icon(Icons.backup_table),
+              onPressed: () {
+
+              },
+            ),
+            IconButton(
+              icon: Icon(Icons.add_alert),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Warning()),
+                );
+              },
+            ),
+          ],
+        ),
+      ),
       appBar: AppBar(
         actions: [
           IconButton(
@@ -31,7 +63,7 @@ class _ProductScreenState extends State<ProductScreen> {
                   }
                 });
               },
-              icon: const Icon(Icons.add_comment)),
+              icon: const Icon(Icons.add)),
           //IconButton(onPressed:var d=1; , icon:const Icon(Icons. ))
         ],
         title: const Text('Composition'),
@@ -50,12 +82,19 @@ class _ProductScreenState extends State<ProductScreen> {
               padding: const EdgeInsets.only(right: 30),
               child: const Icon(Icons.delete_outlined,color: Colors.white,size: 30),
             ),
+            onDismissed: (direction){
+              if(direction==DismissDirection.endToStart){
+                widget.dbHelper.deleteProduct(widget.products[index].name);
+
+              }
+            },
+            
             direction: DismissDirection.horizontal,
 
             child: ListTile(
               title: Text(widget.products[index].name),
               subtitle:
-              Text('Price: ${widget.products[index].price.toString()}'+' Date: ${widget.products[index].time.toString()}'+' Type: ${widget.products[index].description.toString()}'),
+              Text('quantity: ${widget.products[index].price.toString()}'+' Date: ${widget.products[index].time.toString()}'+' Type: ${widget.products[index].description.toString()}'),
 
               trailing: widget.products[index].favorite == 1
                   ? const Icon(Icons.favorite_rounded, color: Colors.red)
@@ -116,7 +155,7 @@ class DetailScreen extends StatelessWidget {
           Container(
             alignment: Alignment.centerLeft,
             padding: const EdgeInsets.only(left: 10, top: 20.0),
-            child: Text('Price: ${productdetail.price.toString()}'),
+            child: Text('quantity: ${productdetail.price.toString()}'),
           ),
           Container(
             padding: const EdgeInsets.only(top: 80),
@@ -220,8 +259,8 @@ class ModalProductForm {
                       child: TextFormField(
                         initialValue: '',
                         decoration: const InputDecoration(
-                          labelText: 'Description',
-                          hintText: 'input description of product',
+                          labelText: 'Type',
+                          hintText: 'input Type',
                         ),
                         onChanged: (value) {
                           _description = value;
@@ -233,8 +272,8 @@ class ModalProductForm {
                       child: TextFormField(
                         initialValue: '',
                         decoration: const InputDecoration(
-                          labelText: 'Price',
-                          hintText: 'input price',
+                          labelText: 'quantity',
+                          hintText: 'input quantity',
                         ),
                         onChanged: (value) {
                           _price = double.parse(value);
@@ -312,7 +351,7 @@ class ModalEditproductForm {
                 const ListTile(
                   title: Center(
                     child: Text(
-                      'Product input Form',
+                      'Composition input Form',
                       style:
                       TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
@@ -327,8 +366,8 @@ class ModalEditproductForm {
                         initialValue: productDetail.name,
                         autofocus: true,
                         decoration: const InputDecoration(
-                          labelText: 'Product Name',
-                          hintText: 'input your name of product',
+                          labelText: 'Composition Name',
+                          hintText: 'input your name of Composition',
                         ),
                         onChanged: (value) {
 
@@ -341,8 +380,8 @@ class ModalEditproductForm {
                         initialValue: productDetail.description,
                         autofocus: true,
                         decoration: const InputDecoration(
-                          labelText: 'Description',
-                          hintText: 'input description of product',
+                          labelText: 'Type',
+                          hintText: 'input Type',
                         ),
                         onChanged: (value) {
                           _description = value;
@@ -354,8 +393,8 @@ class ModalEditproductForm {
                       child: TextFormField(
                         initialValue: productDetail.price.toString(),
                         decoration: const InputDecoration(
-                          labelText: 'Price',
-                          hintText: 'input price',
+                          labelText: 'quantity',
+                          hintText: 'input quantity',
                         ),
                         onChanged: (value) {
                           _price = double.parse(value);
